@@ -6,26 +6,24 @@ import 'package:edutrack/data/auth_repository.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import 'package:edutrack/utils/notification_helper.dart'; // ✅ Tambahkan ini
+import 'package:edutrack/utils/notification_helper.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Inisialisasi notifikasi lokal
   await NotificationHelper.init();
 
-  // ✅ Hapus database lama agar struktur tabel terbaru digunakan
+ 
   await deleteOldDatabase();
 
   runApp(const EduTrackApp());
 }
 
-// ✅ Fungsi untuk hapus database lokal lama
 Future<void> deleteOldDatabase() async {
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'tugas.db');
 
-  // Hapus database jika ada
+
   await deleteDatabase(path);
 }
 
@@ -34,7 +32,7 @@ class EduTrackApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authRepository = AuthRepository(); // Inisialisasi repository
+    final authRepository = AuthRepository(); 
 
     return RepositoryProvider.value(
       value: authRepository,
@@ -46,7 +44,7 @@ class EduTrackApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const LoginPage(), // Halaman login utama
+          home: const LoginPage(), 
         ),
       ),
     );
