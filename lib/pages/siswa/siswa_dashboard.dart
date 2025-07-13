@@ -83,3 +83,150 @@ class _SiswaDashboardState extends State<SiswaDashboard> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFDF6FF),
+      appBar: AppBar(
+        title: const Text('Dashboard Siswa'),
+        backgroundColor: Colors.blueAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            tooltip: 'Lihat Semua Tugas',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<TugasBloc>(),
+                    child: const TugasListPage(),
+                  ),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'Riwayat Tugas',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const RiwayatTugasPage(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: BlocBuilder<TugasBloc, TugasState>(
+          builder: (context, state) {
+            if (state is TugasLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is TugasLoaded) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Halo, ${widget.email} 👋',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                  value: context.read<TugasBloc>(),
+                                  child: const TugasListPage(),
+                                ),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple[100],
+                            foregroundColor: Colors.deepPurple,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          ),
+                          child: const Text('📄 Lihat Tugas Saya'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const RiwayatTugasPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange[100],
+                            foregroundColor: Colors.deepOrange,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          ),
+                          child: const Text('📜 Riwayat Tugas'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () => NotificationHelper.showTestNotification(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[100],
+                            foregroundColor: Colors.blue[900],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          ),
+                          child: const Text('🔔 Test Notifikasi'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (state.tugasList.isNotEmpty) {
+                              _uploadDariKamera(state.tugasList.first.id);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[100],
+                            foregroundColor: Colors.red[900],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          ),
+                          child: const Text('📷 Upload Gambar Kamera'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: _ambilLokasi,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[100],
+                            foregroundColor: Colors.green[900],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          ),
+                          child: const Text('📍 Ambil Lokasi Saya'),
+                        ),
+                      ],
+                    ),
+                  ),
