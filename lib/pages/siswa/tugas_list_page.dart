@@ -42,3 +42,64 @@ class TugasListPage extends StatelessWidget {
       foregroundColor: Colors.white, 
       elevation: 0,
     ),
+
+      backgroundColor: const Color(0xFFFDF6FF),
+      body: BlocBuilder<TugasBloc, TugasState>(
+        builder: (context, state) {
+          if (state is TugasLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is TugasLoaded) {
+            if (state.tugasList.isEmpty) {
+              return const Center(child: Text('Tidak ada tugas.'));
+            }
+
+            return ListView.builder(
+              itemCount: state.tugasList.length,
+              itemBuilder: (context, index) {
+                final tugas = state.tugasList[index];
+                final bool isSelesai = tugas.isSelesai ?? false;
+
+                return Card(
+                  color: isSelesai ? Colors.green.shade100 : null,
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    title: Text(
+                      tugas.judul,
+                      style: TextStyle(
+                        color: isSelesai ? Colors.green.shade900 : null,
+                        fontWeight: isSelesai ? FontWeight.bold : null,
+                      ),
+                    ),
+                    subtitle: Text('Deadline: ${tugas.deadline}'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.upload_file),
+                          tooltip: 'Upload File',
+                          onPressed: () => _uploadFile(context, tugas.id),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.check_circle_outline,
+                            color: isSelesai ? Colors.green : null,
+                          ),
+                          tooltip: 'Tandai Selesai',
+                          onPressed: () => _tandaiSelesai(context, tugas.id),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else if (state is TugasError) {
+            return Center(child: Text(state.message));
+          }
+
+          return const SizedBox();
+        },
+      ),
+    );
+  }
+}
