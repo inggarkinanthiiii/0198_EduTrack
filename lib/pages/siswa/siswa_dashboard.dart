@@ -230,3 +230,60 @@ class _SiswaDashboardState extends State<SiswaDashboard> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Daftar Tugas:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: state.tugasList.isEmpty
+                        ? const Center(child: Text('Tidak ada tugas.'))
+                        : ListView.builder(
+                            itemCount: state.tugasList.length,
+                            itemBuilder: (context, index) {
+                              final tugas = state.tugasList[index];
+                              return Card(
+                                margin: const EdgeInsets.symmetric(vertical: 6),
+                                child: ListTile(
+                                  title: Text(tugas.judul),
+                                  subtitle: Text(
+                                    'Deadline: ${tugas.deadline}\nDeskripsi: ${tugas.deskripsi}',
+                                  ),
+                                  isThreeLine: true,
+                                  trailing: PopupMenuButton<String>(
+                                    onSelected: (value) {
+                                      if (value == 'upload') {
+                                        _uploadFile(tugas.id);
+                                      } else if (value == 'selesai') {
+                                        _tandaiSelesai(tugas.id);
+                                      }
+                                    },
+                                    itemBuilder: (context) => const [
+                                      PopupMenuItem(
+                                        value: 'upload',
+                                        child: Text('Upload File'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'selesai',
+                                        child: Text('Tandai Selesai'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              );
+            } else if (state is TugasError) {
+              return Center(child: Text(state.message));
+            }
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+  }
+}
