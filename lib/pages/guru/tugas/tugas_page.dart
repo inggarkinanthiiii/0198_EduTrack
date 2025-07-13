@@ -15,7 +15,7 @@ class _TugasPageState extends State<TugasPage> {
   List tugasList = [];
   bool isLoading = true;
 
-  /* ------------ GET all tugas ------------ */
+  
   Future<void> fetchTugas() async {
     setState(() => isLoading = true);
     final response = await http.get(
@@ -46,7 +46,7 @@ class _TugasPageState extends State<TugasPage> {
     fetchTugas();
   }
 
-  /* ------------ DELETE tugas ------------ */
+ 
   Future<void> _deleteTugas(int id) async {
     final confirm = await showDialog(
       context: context,
@@ -84,7 +84,7 @@ class _TugasPageState extends State<TugasPage> {
     }
   }
 
-  /* ------------ Open form: add / edit ------------ */
+ 
   Future<void> _openForm({Map<String, dynamic>? editTugas}) async {
     final result = await Navigator.push(
       context,

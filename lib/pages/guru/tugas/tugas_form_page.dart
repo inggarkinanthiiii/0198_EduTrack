@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class TugasFormPage extends StatefulWidget {
   final String token;
-  final Map<String, dynamic>? tugas; // null = tambah, ada = edit
+  final Map<String, dynamic>? tugas;
 
   const TugasFormPage({
     super.key,
@@ -26,7 +26,7 @@ class _TugasFormPageState extends State<TugasFormPage> {
   @override
   void initState() {
     super.initState();
-    // 👉 Isi otomatis jika mode EDIT
+   
     if (widget.tugas != null) {
       judulController.text = widget.tugas!['judul'] ?? '';
       deskripsiController.text = widget.tugas!['deskripsi'] ?? '';
@@ -52,7 +52,7 @@ class _TugasFormPageState extends State<TugasFormPage> {
     http.Response response;
 
     if (isEdit) {
-      // PUT ⬅️ kirim JSON
+     
       headers['Content-Type'] = 'application/json';
       response = await http.put(
         Uri.parse(url),
@@ -64,7 +64,7 @@ class _TugasFormPageState extends State<TugasFormPage> {
         }),
       );
     } else {
-      // POST ⬅️ form‑urlencoded cukup
+     
       response = await http.post(
         Uri.parse(url),
         headers: headers,
@@ -79,7 +79,7 @@ class _TugasFormPageState extends State<TugasFormPage> {
     setState(() => isSubmitting = false);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.pop(context, true); // sukses → refresh list
+      Navigator.pop(context, true); 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
